@@ -1,7 +1,7 @@
 // lib/core/constants.dart
 class AppConstants {
   // ── Change this to your machine's LAN IP ──
-  static const String baseUrl = 'http://10.142.246.31:8000/api/v1';
+  static const String baseUrl = 'http://10.38.62.155:8000/api/v1';
 
   // Colors
   static const int primaryColorValue = 0xFF007BFF;
