@@ -1,8 +1,10 @@
 import asyncio
 import httpx
+import pytest
 
 BASE_URL = "http://localhost:8000/api/v1"
 
+@pytest.mark.asyncio
 async def test_auth():
     async with httpx.AsyncClient() as client:
         # 1. Register
