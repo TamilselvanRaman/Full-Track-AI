@@ -25,20 +25,9 @@ final routerProvider = Provider<GoRouter>((ref) {
   final notifier = RouterNotifier(ref);
 
   return GoRouter(
-    initialLocation: '/splash',
+    initialLocation: '/dashboard',
     refreshListenable: notifier,
-    redirect: (context, state) {
-      final loggedIn = ref.read(authProvider).isLoggedIn;
-      final path = state.uri.path;
-
-      final onAuth  = path.startsWith('/login') ||
-                      path.startsWith('/register') ||
-                      path == '/splash';
-
-      if (!loggedIn && !onAuth) return '/login';
-      if (loggedIn && (path == '/login' || path == '/splash')) return '/dashboard';
-      return null;
-    },
+    redirect: (context, state) => null,
     routes: [
       GoRoute(path: '/splash',    builder: (_, __) => const SplashScreen()),
       GoRoute(path: '/login',     builder: (_, __) => const LoginScreen()),

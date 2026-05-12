@@ -14,13 +14,28 @@ from app.db.session import get_db
 from sqlalchemy.future import select
 
 reusable_oauth2 = OAuth2PasswordBearer(
-    tokenUrl=f"{settings.API_V1_STR}/login/access-token"
+    tokenUrl=f"{settings.API_V1_STR}/login/access-token",
+    auto_error=False
 )
 
 async def get_current_user(
-    token: str = Depends(reusable_oauth2),
+    token: Optional[str] = Depends(reusable_oauth2),
     db: AsyncSession = Depends(get_db),
 ) -> User:
+    if not token:
+        # Fallback to default user for "no-login" mode
+        result = await db.execute(select(User).where(User.id == 1))
+        user = result.scalars().first()
+        if not user:
+            # If default user doesn't exist, we still need to allow the app to proceed 
+            # if we want a true bypass, but most endpoints need a user_id.
+            # We'll handle creation of this user in main.py startup.
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Not authenticated and no default user found",
+            )
+        return user
+
     try:
         payload = jwt.decode(
             token, settings.SECRET_KEY, algorithms=[security.ALGORITHM]

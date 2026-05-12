@@ -8,7 +8,7 @@ class AuthState {
   final String? errorMessage;
 
   const AuthState({
-    this.isLoggedIn = false,
+    this.isLoggedIn = true,
     this.isLoading = false,
     this.errorMessage,
   });
